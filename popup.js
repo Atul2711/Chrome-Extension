@@ -1,13 +1,10 @@
-document.addEventListener('DOMContentLoaded',function(){
-
-    document.querySelector('button').addEventListener('click',onclick,false)
-    
-        function onclick (){
-            var color =document.getElementById("color").value
-            chrome.tabs.query({currentWindow:true,active:true},function(tabs){
-                chrome.tabs.sendMessage(tabs[0].id,color)
-            })
-        }
-    
-
-},false)
+document.getElementById('myForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: () => {
+        chrome.tabs.update({ url: 'camera.html' });
+      }
+    });
+  });
